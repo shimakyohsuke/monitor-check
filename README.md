@@ -9,4 +9,4 @@
 
 # ページ
 
-https://affe347b.monitor-check.pages.dev/
+https://monitor-check.pages.dev/
