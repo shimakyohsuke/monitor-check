@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>モニターのセンター位置とか画面の色を一色にして汚れを確認する</title>
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="diagonal-line"></div>
+      <div class="items">
+        <div class="item">
+          <p class="heading">中心確認</p>
+          <div class="row">
+            <button id="diagonal-line-btn">非表示</button>
+          </div>
+        </div>
+        <div class="item">
+          <p class="heading">フルスクリーン</p>
+          <div class="row">
+            <button id="button1">表示</button>
+            <button id="button2">解除</button>
+          </div>
+        </div>
+        <div class="item">
+          <p class="heading">背景色のカラーピッカー</p>
+          <input type="color" id="color-picker-palette" value="#0000FF" />
+          <input type="submit" id="color-picker-submit" value="背景色を変更する" />
+        </div>
+      </div>
+    </div>
+    <footer>
+      <ul>
+        <li><a href="https://github.com/shimakyohsuke/monitor-check"></a></li>
+      </ul>
+      <small>&copy; shimakyohsuke</small>
+    </footer>
+  </body>
+</html>
