@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  function changeBackground() {
-    document.querySelector('.container').style.background = document.getElementById('color-picker-palette').value;
+  function changeBackground(event) {
+    document.querySelector('.container').style.background = event.target.value;
   }
-  document.getElementById('color-picker-submit').addEventListener('click', changeBackground);
+  document.getElementById('color-picker-palette').addEventListener('input', changeBackground, false);
 
   document.getElementById('diagonal-line-btn').addEventListener('click', function () {
     document.getElementById('diagonal-line').classList.toggle('is-hide');
