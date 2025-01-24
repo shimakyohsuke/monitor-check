@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('button1').addEventListener('click', function () {
-    document.body.requestFullscreen();
-  });
-
-  document.getElementById('button2').addEventListener('click', function () {
-    document.exitFullscreen();
+  document.getElementById('fullscreen-btn').addEventListener('click', function () {
+    if (document.fullscreenElement) {
+      document
+        .exitFullscreen()
+        .then(() => console.log('Document Exited from Full screen mode'))
+        .catch((err) => console.error(err));
+      document.getElementById('fullscreen-btn').textContent = '表示';
+    } else {
+      document.documentElement.requestFullscreen();
+      document.getElementById('fullscreen-btn').textContent = '解除';
+    }
   });
 
   function changeBackground() {
