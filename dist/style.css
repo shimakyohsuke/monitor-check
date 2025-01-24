@@ -1,4 +1,3 @@
-
 body {
   font-family: "Noto Sans JP", serif;
   font-optical-sizing: auto;
@@ -35,10 +34,13 @@ body {
   transform: translateX(-50%);
 }
 
+/* #diagonal-line */
 #diagonal-line {
   width: 100vw;
   height: 100svh;
   position: fixed;
+  top: 0;
+  left: 0;
 }
 
 #diagonal-line.is-hide {
@@ -76,7 +78,7 @@ body {
   gap: 30px;
   width: 100vw;
   height: 100svh;
-  padding: 10em;
+  padding: 5em;
   box-sizing: border-box;
   z-index: 100;
   position: relative;
@@ -112,28 +114,26 @@ button {
   font-size: 1em;
   line-height: 1;
   border: 1px solid;
-  padding: .5em;
+  padding: .5em .8em;
   border-radius: 10px;
   background: #000;
 }
 
 /* color-picker */
 #color-picker-palette {
-  width: 100%;
-  height: 100px;
+  width: 4vw;
+  height: 4vw;
+  box-sizing: border-box;
+  background-color: buttonface;
+  border-style: solid;
+  border-width: 0;
+  border-color: buttonborder;
+  border-image: initial;
+  padding: 1px 3px;
+  cursor: pointer;
 }
 
-#color-picker-submit {
-  border: 1px solid;
-  padding: .5em;
-  border-radius: 10px;
-  font-weight: bold;
-  color: #FFF;
-  font-size: 1em;
-  line-height: 1;
-  background: #000;
-}
-
+/* #footer */
 #footer {
   padding: 1em;
   display: flex;
