@@ -23,36 +23,47 @@
   <body>
     <div class="container">
       <div id="diagonal-line" class="is-hide"></div>
-      <div class="items">
-        <div class="item">
-          <p class="heading">中心確認</p>
-          <div class="row">
-            <button id="diagonal-line-btn">表示</button>
+      <div class="content">
+        <div class="controller">
+          <button class="controller-toggle" id="controller-toggle-btn">↑↑↑非表示↑↑↑</button>
+          <div class="items">
+            <div class="item">
+              <p class="heading">フルスクリーン</p>
+              <div class="row">
+                <button class="btn" id="fullscreen-btn">表示</button>
+              </div>
+            </div>
+            <div class="item">
+              <p class="heading">中心確認</p>
+              <div class="row">
+                <button class="btn" id="diagonal-line-btn">表示</button>
+              </div>
+            </div>
+            <div class="item">
+              <p class="heading">センター線</p>
+              <div class="row">
+                <button class="btn" id="line-btn">非表示</button>
+              </div>
+            </div>
+            <div class="item">
+              <p class="heading">背景色のカラーピッカー</p>
+              <input type="color" id="color-picker-palette" value="#37ff00" />
+            </div>
+            <footer id="footer" class="item">
+              <nav>
+                <ul id="footer-nav">
+                  <li>
+                    <a href="https://github.com/shimakyohsuke/monitor-check"><i class="fa-brands fa-github"></i></a>
+                  </li>
+                  <li>
+                    <a href="https://x.com/shima_x_o"><i class="fa-solid fa-x"></i></a>
+                  </li>
+                </ul>
+              </nav>
+              <small id="footer-copy">&copy; shimakyohsuke</small>
+            </footer>
           </div>
         </div>
-        <div class="item">
-          <p class="heading">フルスクリーン</p>
-          <div class="row">
-            <button id="fullscreen-btn">表示</button>
-          </div>
-        </div>
-        <div class="item">
-          <p class="heading">背景色のカラーピッカー</p>
-          <input type="color" id="color-picker-palette" value="#0000FF" />
-        </div>
-        <footer id="footer" class="item">
-          <nav>
-            <ul id="footer-nav">
-              <li>
-                <a href="https://github.com/shimakyohsuke/monitor-check"><i class="fa-brands fa-github"></i></a>
-              </li>
-              <li>
-                <a href="https://x.com/shima_x_o"><i class="fa-solid fa-x"></i></a>
-              </li>
-            </ul>
-          </nav>
-          <small id="footer-copy">&copy; shimakyohsuke</small>
-        </footer>
       </div>
     </div>
   </body>
