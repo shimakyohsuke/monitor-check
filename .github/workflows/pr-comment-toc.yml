@@ -1,0 +1,94 @@
+# .github/workflows/pr-comment-toc.yml に配置してください
+name: PR comment TOC
+
+on:
+  issue_comment:               # PRの会話タブのコメント
+    types: [created, edited, deleted]
+  pull_request_review:         # レビュー本文
+    types: [submitted, edited]
+  pull_request_review_comment: # コード行へのコメント
+    types: [created, edited, deleted]
+
+permissions:
+  pull-requests: write
+  issues: read
+  contents: read
+
+# 同じPRで同時に走って上書きし合わないようにする
+concurrency:
+  group: pr-toc-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  toc:
+    # issue_comment は Issue でも発火するので PR のときだけ実行
+    if: github.event_name != 'issue_comment' || github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pull_number = context.payload.issue?.number ?? context.payload.pull_request.number;
+            const START = '<!-- toc:start -->';
+            const END = '<!-- toc:end -->';
+            const MAX_LEVEL = 3; // h1〜h3 を目次に含める
+
+            // コードブロック内を除外して見出しを抽出
+            const extractHeadings = (body) => {
+              if (!body) return [];
+              const out = [];
+              let inFence = false;
+              for (const line of body.split(/\r?\n/)) {
+                if (/^\s*(```|~~~)/.test(line)) { inFence = !inFence; continue; }
+                if (inFence) continue;
+                const m = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+                if (m && m[1].length <= MAX_LEVEL) out.push({ level: m[1].length, text: m[2] });
+              }
+              return out;
+            };
+
+            const opts = { owner, repo, per_page: 100 };
+            const [issueComments, reviews, reviewComments] = await Promise.all([
+              github.paginate(github.rest.issues.listComments, { ...opts, issue_number: pull_number }),
+              github.paginate(github.rest.pulls.listReviews, { ...opts, pull_number }),
+              github.paginate(github.rest.pulls.listReviewComments, { ...opts, pull_number }),
+            ]);
+
+            const items = [...issueComments, ...reviews, ...reviewComments]
+              .map(c => ({
+                url: c.html_url,
+                user: c.user?.login ?? 'unknown',
+                date: c.created_at ?? c.submitted_at ?? '',
+                headings: extractHeadings(c.body),
+              }))
+              .filter(c => c.headings.length > 0)
+              .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const lines = [];
+            for (const c of items) {
+              lines.push(`- [@${c.user} (${c.date.slice(0, 10)})](${c.url})`);
+              for (const h of c.headings) {
+                const text = h.text.replace(/[\[\]]/g, '\\$&');
+                lines.push(`${'  '.repeat(h.level)}- [${text}](${c.url})`);
+              }
+            }
+
+            const toc = [
+              START,
+              '<details><summary>💬 コメント目次（自動生成）</summary>',
+              '',
+              lines.length ? lines.join('\n') : '_見出しを含むコメントはまだありません_',
+              '',
+              '</details>',
+              END,
+            ].join('\n');
+
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number });
+            const body = pr.body ?? '';
+            const re = new RegExp(`${START}[\\s\\S]*?${END}`);
+            const newBody = re.test(body) ? body.replace(re, () => toc) : `${body}\n\n${toc}`;
+
+            if (newBody !== body) {
+              await github.rest.pulls.update({ owner, repo, pull_number, body: newBody });
+            }
